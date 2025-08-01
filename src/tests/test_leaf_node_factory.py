@@ -1,8 +1,8 @@
 import unittest
-from leaf_node_factory import create_leaf_node
-from leafnode import LeafNode
-from textnode import TextNode
-from texttype import TextType  
+from nodes.leaf_node_factory import create_leaf_node
+from nodes.leafnode import LeafNode
+from nodes.textnode import TextNode
+from nodes.texttype import TextType
 
 
 class TestLeafNodeFactory(unittest.TestCase):

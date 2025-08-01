@@ -1,6 +1,6 @@
-from leafnode import LeafNode
-from textnode import TextNode
-from texttype import TextType
+from nodes.leafnode import LeafNode
+from nodes.textnode import TextNode
+from nodes.texttype import TextType
 
 
 def create_leaf_node(text_node: TextNode) -> LeafNode:
