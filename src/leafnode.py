@@ -6,13 +6,13 @@ class LeafNode(HTMLNode):
             self, 
             tag: str | None, 
             value: str, 
-            props: dict[str, str] = None
+            props: dict[str, str] | None = None
     ):
         super().__init__(tag, value, None, props)
 
     def to_html(self) -> str:
         if self.value is None:
-            raise ValueError("LeafNode must have a value")
+            raise ValueError("invalid HTML: no value")
         
         if self.tag is None:
             return self.value
