@@ -1,5 +1,9 @@
 import unittest
-from inline_markdown import split_nodes_delimiter
+from inline_markdown import (
+    split_nodes_delimiter,
+    extract_markdown_images,
+    extract_markdown_links
+)
 from nodes.textnode import TextNode
 from nodes.texttype import TextType
 
@@ -83,6 +87,48 @@ class TestInlineMarkdown(unittest.TestCase):
             ],
             new_nodes,
         )
+
+    def test_extract_markdown_images(self):
+        text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        expected = [
+            ("rick roll", "https://i.imgur.com/aKaOqIh.gif"),
+            ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg"),
+        ]
+        extracted_images = extract_markdown_images(text)
+        self.assertEqual(extracted_images, expected)
+
+    def test_extract_markdown_images_no_images(self):
+        text = "This is text without images"
+        expected = []
+        extracted_images = extract_markdown_images(text)
+        self.assertEqual(extracted_images, expected)
+
+    def test_extract_markdown_images_no_exclamation(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and an image ![rick roll](https://i.imgur.com/aKaOqIh.gif)"
+        expected = [("rick roll", "https://i.imgur.com/aKaOqIh.gif")]
+        extracted_images = extract_markdown_images(text)
+        self.assertEqual(extracted_images, expected)
+
+    def test_extract_markdown_links(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+        expected = [
+            ("to boot dev", "https://www.boot.dev"),
+            ("to youtube", "https://www.youtube.com/@bootdotdev"),
+        ]
+        extracted_links = extract_markdown_links(text)
+        self.assertEqual(extracted_links, expected)
+
+    def test_extract_markdown_links_no_links(self):
+        text = "This is text without links"
+        expected = []
+        extracted_links = extract_markdown_links(text)
+        self.assertEqual(extracted_links, expected)
+
+    def test_extract_markdown_links_with_exclamation(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and an image ![rick roll](https://i.imgur.com/aKaOqIh.gif)"
+        expected = [("to boot dev", "https://www.boot.dev")]
+        extracted_links = extract_markdown_links(text)
+        self.assertEqual(extracted_links, expected)
 
 if __name__ == "__main__":
     unittest.main()
