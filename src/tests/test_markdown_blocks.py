@@ -1,5 +1,9 @@
 import unittest
-from markdown_blocks import markdown_to_blocks
+from markdown_blocks import (
+    markdown_to_blocks,
+    block_to_block_type
+)
+from block_type import BlockType
 
 
 class TestBlocksMarkdown(unittest.TestCase):
@@ -42,3 +46,36 @@ class TestBlocksMarkdown(unittest.TestCase):
             """
         blocks = markdown_to_blocks(md)
         self.assertEqual(blocks, ["This is a paragraph", "Another paragraph"])
+
+    def test_block_to_block_type_heading(self):
+        block = "# Heading 1"
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.HEADING)
+
+    def test_block_to_block_type_code(self):
+        block = "```\nprint('Hello, World!')\n```"
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.CODE)
+
+    def test_block_to_block_type_quote(self):
+        block = "> This is a quote"
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.QUOTE)
+
+    def test_block_to_block_type_unordered_list(self):
+        block = "- Item 1\n- Item 2"
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.UNORDERED_LIST)
+
+    def test_block_to_block_type_ordered_list(self):
+        block = "1. Item 1\n2. Item 2"
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.ORDERED_LIST)
+
+    def test_block_to_block_type_paragraph(self):
+        block = "This is a paragraph."
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.PARAGRAPH)
+
+if __name__ == "__main__":
+    unittest.main()
